@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1 # версия API для Ingress
+kind: Ingress # тип ресурса: правило входа в кластер
+metadata: # данные об Ingress
+  name: final-mikle # имя Ingress в кластере
+spec: # описание Ingress
+  ingressClassName: nginx # обслуживает это правило nginx ingress controller
+  rules: # правила: какой запрос на какой адрес отправить куда
+    - host: app.mikle.mikle-final.pp.ua # правило для запросов на этот адрес (ExternalDNS создаст DNS-запись)
+      http: # запросы по протоколу HTTP
+        paths: # по каким путям в адресе
+          - path: / # все запросы, которые начинаются с /
+            pathType: Prefix # путь считается по началу: под / подходит любой адрес
+            backend: # куда отправить такие запросы
+              service: # на Service
+                name: final-mikle # на Service с именем final-mikle
+                port: # на его порт
+                  number: 80 # порт 80 (тот, что указан в service.yaml)

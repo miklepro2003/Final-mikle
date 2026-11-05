@@ -1,0 +1,13 @@
+apiVersion: v1                   # версия API для Service
+kind: Service                     # тип ресурса: постоянный адрес для подов
+metadata:                         # данные о Service
+  name: final-mikle          # имя Service, на него ссылается Ingress
+
+spec: # описание Service
+  type: ClusterIP # адрес только внутри кластера; снаружи заходим через Ingress
+  selector: # каким подам отправлять трафик
+    app: final-mikle # всем подам с меткой app=final-mikle
+  ports: # какие порты открыть
+    - name: http # имя порта для удобства
+      port: 80 # порт Service: на него отправляет запросы Ingress
+      targetPort: 8080 # порт пода, на который Service пересылает запросы
