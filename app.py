@@ -16,7 +16,7 @@ class Handler(BaseHTTPRequestHandler):
                 ip = "unknown" # если имя не удалось превратить в ip, не роняем сервер
             
             # Формируем тело ответа и кодируем строку в байты (HTTP передаёт байты)
-            body = f"Hello from Final-mikle\nHostname: {hostname}\nIP: {ip}\n".encode("utf-8")
+            body = f"Hello from Final-mikle v2\nHostname: {hostname}\nIP: {ip}\n".encode("utf-8")
             
             self.send_response(200)                                  # статус ответа 200 OK
             self.send_header("Content-Type", "text/plain; charset=utf-8")  # тип содержимого
