@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1 # версия API ArgoCD
+kind: Application # тип ресурса: задание для ArgoCD «возьми манифесты отсюда и разверни вот сюда»
+
+metadata: # данные о самом Application
+  name: final-mikle # имя приложения в ArgoCD
+  namespace: argocd # Application должен лежать в namespace, где работает ArgoCD
+  finalizers: # действия при удалении Application
+    - resources-finalizer.argocd.argoproj.io # удалить из кластера все ресурсы приложения
+
+spec: # описание Application
+  project: default # проект ArgoCD: стандартный
+  source: # откуда брать манифесты
+    repoURL: https://github.com/miklepro2003/Final-mikle.git # адрес Git-репозитория
+    targetRevision: main # какую ветку читать
+    path: k8s # какую папку репозитория читать: там наши манифесты
+  destination: # куда разворачивать
+    server: https://kubernetes.default.svc # в тот же кластер, где работает ArgoCD
+    namespace: app # в какой namespace попадут Deployment, Service и Ingress
+  syncPolicy: # правила синхронизации: как приводить кластер к Git
+    automated: # автоматическая синхронизация
+      prune: true # если файл удалили из Git, удалить его ресурс в кластере
+      selfHeal: true # если ресурс изменили руками в кластере, вернуть как в Git
+    syncOptions: # дополнительные опции синхронизации
+      - CreateNamespace=true # создать namespace app, если его ещё нет
